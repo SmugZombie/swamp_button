@@ -1,3 +1,8 @@
+# Swamp AButton Listener
+# Ron Egli / Github.com/SmugZombie
+# Simple script to listen for a button imput to update an api
+# Version 1.0
+
 import RPi.GPIO as GPIO
 import time, requests, json
 
@@ -16,7 +21,6 @@ def toggleStatus():
     response = requests.request("GET", url, headers=headers, params=querystring)
     print response.text
     lightState = int(json.loads(response.text)['status'])
-
 
 while True:
     input_state = GPIO.input(23)

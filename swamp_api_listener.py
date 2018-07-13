@@ -1,16 +1,18 @@
+# Swamp API Listener
+# Ron Egli / Github.com/SmugZombie
+# Simple script to check an API status and relay via LEDS
+# Version 1.0
+
 import RPi.GPIO as GPIO
 import time, requests, json
 
 lightState=0
-
 GPIO.setmode(GPIO.BCM)
-
 GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setwarnings(False)
-GPIO.setup(18,GPIO.OUT)
-GPIO.setup(17,GPIO.OUT)
-GPIO.setup(16,GPIO.OUT)
-
+GPIO.setup(18,GPIO.OUT) # Red LED
+GPIO.setup(17,GPIO.OUT) # Green LED
+GPIO.setup(16,GPIO.OUT) # Yellow LED
 
 def getAPIState():
     global lightState
@@ -21,7 +23,6 @@ def getAPIState():
     print response.text
     lightState = int(json.loads(response.text)['status'])
     print lightState
-#    changelightState()
     toggleLights()
 
 def toggleLights():
@@ -35,33 +36,9 @@ def toggleLights():
         GPIO.output(17,GPIO.HIGH)
         GPIO.output(18,GPIO.LOW)
 
-def getlightState():
-    return lightState
-
+# Light Up Yellow
 GPIO.output(16,GPIO.HIGH)
-
 
 while True:
     getAPIState()
     time.sleep(3)
-#while True:
-#    input_state = GPIO.input(23)
-#    getAPIState()
-#    if input_state == False:
-#        print('Button Pressed')
-#	changelightState()
-#	GPIO.output(18,GPIO.HIGH)
-#	GPIO.output(17,GPIO.HIGH)
-
-#	if getlightState() == 1:
-#	    GPIO.output(17,GPIO.HIGH)
-#	    GPIO.output(18,GPIO.LOW)
-#	else:
-#	    GPIO.output(18,GPIO.HIGH)
-#	    GPIO.output(17,GPIO.LOW)
-#
-#	time.sleep(1)
-#    else:
-	
-#	GPIO.output(18,GPIO.LOW)
-#	GPIO.output(17,GPIO.LOW)
